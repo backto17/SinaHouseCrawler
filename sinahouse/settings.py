@@ -15,6 +15,13 @@ LOG_FILE = 'SinaHouse_' + str(datetime.date.today()) +  '.log'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'sinahouse (+http://www.yourdomain.com)'
 
+MAIL_FROM = 'google_lover@163.com'
+MAIL_HOST = 'smtp.163.com'
+MAIL_PORT = 25
+MAIL_PASS = '1510720336'
+MAIL_USER = 'google_lover@163.com'
+STATSMAILER_RCPTS = ['lingang_upc@163.com',]
+
 CONCURRENT_ITEMS = 600
 REACTOR_THREADPOOL_MAXSIZE = 128
 HTTPCACHE_ENABLED = False

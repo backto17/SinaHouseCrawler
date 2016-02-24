@@ -8,8 +8,8 @@ from sinahouse.items import HouseItem
 from sinahouse import settings
 
 
-class SinaSpider(CrawlSpider):
-    name = 'sina'
+class SinaHouseSpider(CrawlSpider):
+    name = 'sinahouse'
     allowed_domains = ['house.sina.com.cn']
     start_urls = ['http://data.house.sina.com.cn/sc/search/?keyword=&charset=utf8',]
     rules = [
