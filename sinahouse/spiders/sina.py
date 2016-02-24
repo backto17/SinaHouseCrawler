@@ -1,15 +1,10 @@
-#coding:utf-8
+# coding:utf-8
+# author:alex lin
+import re
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from sinahouse.items import HouseItem
-import re
-import time
-# from scrapy.selector import Selector
-import sys
-sys.path.append('E:\code\java\spider')
-reload(sys)
-from standardization.standarlize import judge_type,pretty_json
 from sinahouse import settings
 
 
@@ -24,6 +19,8 @@ class SinaSpider(CrawlSpider):
             Rule(LinkExtractor(allow = ('/\w+/search-\d*/.*'))),
  
             ]
+
+#    LinkExtractor 自动补全了url路径 故省略
 #     ,process_links="parse_city_next_links"
 #     def parse_city_next_links(self,links):
 #         for link in links:
@@ -56,11 +53,6 @@ class SinaSpider(CrawlSpider):
         item['decoration'] = response.xpath("//div[@class='info wm']/ul/li[12]/text()").extract_first(default=u'未知').strip()
         item['per_square_price'] = response.xpath("//*[@id='callmeBtn']/ul/li[1]/em[1]/text()").extract_first(default=u'未知').strip()
 
-#         item['longitude'] = ''
-#         item['latitude'] = ''
-#         item['bus'] = ''
-#         item['metro'] = ''
-#         item['description'] = ''
         image_index_url = response.xpath('/html/body/div[1]/div[10]/ul/li[4]/a/@href').extract_first()
         
 #         from scrapy.shell import inspect_response
@@ -68,7 +60,7 @@ class SinaSpider(CrawlSpider):
         if image_index_url:
             yield scrapy.Request(url=image_index_url, meta={"house_item": item}, callback=self.parse_item_image)
         else:
-            self.logger.info(pretty_json((u'此楼盘无图片:' , item['community_name'] ,item['index_url'])))
+            self.logger.info((u'此楼盘无图片:' , item['community_name'] ,item['index_url']))
     
     def parse_item_image(self,response):
         item = response.meta["house_item"]
@@ -88,8 +80,7 @@ class SinaSpider(CrawlSpider):
             img_src_url_tmp = li.xpath('.//img/@src').extract_first()
             img_src_url = img_src_url_tmp[:(img_src_url_tmp.index('mk7')+3)]+'.jpg'
             size = li.xpath(".//span[@class='infoSpanNum']/span/em/text()").extract_first(default=0)
-            huxing_type = judge_type(huxing[:4])
-            item['house_img_urls'].append((huxing,img_src_url,size,huxing_type))
+            item['house_img_urls'].append((huxing,img_src_url,size))
             
         
         next_url = response.xpath(u"//span[@class='pagebox_next' and contains(a,'下一页')]/a/@href").extract_first()
@@ -98,7 +89,7 @@ class SinaSpider(CrawlSpider):
             yield scrapy.Request(url = next_url,meta={'house_item':item},callback=self.parse_item_huxing)
         else:
             item['house_img_urls'] = len(item['house_img_urls'])
-            self.logger.info(pretty_json(dict(item)))
+            self.logger.info(dict(item))
 
             yield item
     

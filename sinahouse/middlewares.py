@@ -1,5 +1,4 @@
 import random
-import logging
 
 class UserAgentMiddleware(object):   
     """add a random useragent to request"""  
@@ -29,4 +28,3 @@ class ProxyMiddleware(object):
         print request.meta
         
         
-           
