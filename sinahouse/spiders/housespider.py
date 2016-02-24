@@ -4,7 +4,7 @@ import re
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-from sinahouse.items import HouseItem
+from sinahouse.items import SinaHouseItem
 from sinahouse import settings
 
 
@@ -32,7 +32,7 @@ class SinaHouseSpider(CrawlSpider):
         return links
         
     def parse_item(self,response):
-        item = HouseItem()
+        item = SinaHouseItem()
         item['source_id'] = settings.SOURCE
         item['save_path'] = settings.IMAGE_PATH
         item['community_name'] = response.xpath('/html/body/div[1]/div[9]/div[1]/h2/text()').extract_first()
