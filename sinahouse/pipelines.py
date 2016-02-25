@@ -9,7 +9,7 @@ from scrapy.mail import MailSender
 
 class MongoPipeline(object):
     collection_name = "scrapy_items"
-    def __init__(self, mongo_uri=("localhost",27017), mongo_db="mail",settings=None):
+    def __init__(self, mongo_uri=("localhost",27017), mongo_db="sinahouse",settings=None):
         self.client = pymongo.MongoClient(*mongo_uri)
         self.db = self.client[mongo_db]
         self.settings = settings
@@ -25,7 +25,7 @@ class MongoPipeline(object):
     def close_spider(self,spider):
         mailer = MailSender.from_settings(self.settings)
         self.client.close()
-        mailer.send(to=["lingang_upc@163.com"], subject="Some subject", body="Some body",cc=[])
+#         mailer.send(to=["lingang_upc@163.com"], subject="Some subject", body="Some body",cc=[])
         
 #     def close_spider(self,spider):
 #         for t in threading.enumerate():

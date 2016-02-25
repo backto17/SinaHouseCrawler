@@ -11,7 +11,7 @@ LOG_FORMATTER = 'sinahouse.utils.PoliteLogFormatter'
 
 SOURCE = 15
 IMAGE_PATH = 'F:/data/sina/upload/'
-LOG_FILE = 'SinaHouse_' + str(datetime.date.today()) +  '.log'
+# LOG_FILE = 'SinaHouse_' + str(datetime.date.today()) +  '.log'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'sinahouse (+http://www.yourdomain.com)'
 
@@ -22,10 +22,10 @@ MAIL_PASS = '1510720336'
 MAIL_USER = 'google_lover@163.com'
 STATSMAILER_RCPTS = ['lingang_upc@163.com',]
 
-CONCURRENT_ITEMS = 600
-REACTOR_THREADPOOL_MAXSIZE = 128
+CONCURRENT_ITEMS = 60
+REACTOR_THREADPOOL_MAXSIZE = 20
 HTTPCACHE_ENABLED = False
-CONCURRENT_REQUESTS = 350
+CONCURRENT_REQUESTS = 30
 # Disable cookies (enabled by default)
 COOKIES_ENABLED=False
 CONCURRENT_REQUESTS_PER_DOMAIN = 640
@@ -46,7 +46,7 @@ ITEM_PIPELINES = {
 }
 
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'DEBUG'
 
 USER_AGENTS = [
     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
@@ -90,14 +90,14 @@ PROXIES = [
 
 # Enables scheduling storing requests queue in redis.
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-
+ 
 # Don't cleanup redis queues, allows to pause/resume crawls.
 SCHEDULER_PERSIST = True
-
+ 
 # Schedule requests using a priority queue. (default)
 SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
-
-REDIS_HOST = '192.168.3.247'
+ 
+REDIS_HOST = '192.168.3.225'
 REDIS_PORT = 6379
 
 ################################################################################################################################

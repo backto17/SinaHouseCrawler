@@ -7,13 +7,7 @@
 
 import scrapy
 
-
-class HouseProjectItem(scrapy.Item):
-    # define the Fields for your item here like:
-    # name = scrapy.Field()
-    pass
-
-class HouseItem(scrapy.Item):
+class SinaHouseItem(scrapy.Item):
     save_path = scrapy.Field()
     source_id = scrapy.Field()
     index_url = scrapy.Field()
