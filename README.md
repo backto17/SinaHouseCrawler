@@ -9,4 +9,4 @@
 
 其他说明.LOG_FORMATTER = 'sinahouse.utils.PoliteLogFormatter', 实现raise DropItem()时避免scrapy弹出大量提示信息; 图片保存路径,数据库连接等参数,请根据自己环境设置; 更多相关信息请查阅scrapy以及scrapy-redis文档
   
-  ####爬取目标网站:[新浪房产](http://data.house.sina.com.cn/sc/search/)  
+  爬取目标网站:[新浪房产](http://data.house.sina.com.cn/sc/search/)  
