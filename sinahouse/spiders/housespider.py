@@ -1,6 +1,7 @@
 # coding:utf-8
 # author:alex lin
 import re
+import uuid
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
@@ -13,10 +14,10 @@ class SinaHouseSpider(CrawlSpider):
     allowed_domains = ['house.sina.com.cn']
     start_urls = ['http://data.house.sina.com.cn/sc/search/?keyword=&charset=utf8',]
     rules = [
-            Rule(LinkExtractor(allow = ('/\w+\d+?.*bt\d*')),callback='parse_item',follow=False),
-            Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/\w+/search/$')),process_links="parse_city_links"), #各个城市链接提取
+            Rule(LinkExtractor(allow = ('.*\.cn/\w+\d+\?wt_source.*?bt.*')),callback='parse_item',follow=False),
+#             Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/sc/search/$')),process_links="parse_city_links"), #各个城市链接提取
 #              Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/\w+/search-\d*/\?bcity=\w*$'))), #
-            Rule(LinkExtractor(allow = ('/\w+/search-\d*/.*'))),
+            Rule(LinkExtractor(allow = ('/sc/search-\d*/.*'))),
  
             ]
 
@@ -37,7 +38,6 @@ class SinaHouseSpider(CrawlSpider):
         item['save_path'] = settings.IMAGE_PATH
         item['community_name'] = response.xpath('/html/body/div[1]/div[9]/div[1]/h2/text()').extract_first()
         item['index_url'] = response.url
-#         item['kaipan_date'] = '-'.join(re.findall('(\d+)',response.xpath(u"//div[@class='info wm']//li[contains(span,'开盘时间')]/div/@title").extract_first()))
         item['open_date'] = '-'.join(re.findall('(\d+)',response.xpath(u"//*[@id='callmeBtn']/ul/li[4]/span[2]/text()").extract_first(default=u'待定').strip()))
         item['check_in_date'] = '-'.join(re.findall('(\d+)',response.xpath(u'(//*[@id="callmeBtn"]//div[@title])[2]/@title').extract_first(default=u'待定')))
         item['developer'] = response.xpath(u"//div[@class='info wm']/ul/li[3]/text()").extract_first(default=u'未知').strip()
@@ -45,7 +45,7 @@ class SinaHouseSpider(CrawlSpider):
         item['address'] = response.xpath(u'//*[@id="callmeBtn"]/ul/li[2]/span[2]/text()').extract_first(default=u'未知').strip()
         item['area_name'] = response.xpath("//span[@class='fl']/a[3]//text()").extract_first(default=u'未知').strip()
         item['city_name'] = response.xpath("//span[@class='fl']/a[1]//text()").extract_first(default=u'未知').replace(u'房产','').strip()
-        item['cover_urls'] = response.xpath("//*[@id='con_tab1_con_3']/a/img/@lsrc").extract_first()
+        item['cover_url'] = [response.xpath("//*[@id='con_tab1_con_3']/a/img/@lsrc").extract_first(),str(uuid.uuid4()).replace('-','')]
         item['household_size'] = response.xpath("//div[@class='info wm']/ul/li[5]/text()").extract_first(default=u'未知').replace(u'户','').strip()
         item['property_manage_fee'] = response.xpath("//div[@class='info wm']/ul/li[7]/text()").extract_first(default=u'未知').strip()
         item['construction_area'] = response.xpath("//div[@class='info wm']/ul/li[9]/text()").extract_first(default=u'未知').strip()
@@ -60,7 +60,8 @@ class SinaHouseSpider(CrawlSpider):
         if image_index_url:
             yield scrapy.Request(url=image_index_url, meta={"house_item": item}, callback=self.parse_item_image)
         else:
-            self.logger.info((u'此楼盘无图片:' , item['community_name'] ,item['index_url']))
+            self.logger.info(u'此楼盘无图片:' + item['index_url'])
+            yield item
     
     def parse_item_image(self,response):
         item = response.meta["house_item"]
@@ -70,7 +71,8 @@ class SinaHouseSpider(CrawlSpider):
             self.logger.debug(u'楼盘图片首页:' + huxing_index_url )
             yield scrapy.Request(url = huxing_index_url,meta={'house_item':item},callback=self.parse_item_huxing)
         else:
-            self.logger.info(u'此楼盘无户型图片:' + item['community_name'] + item['index_url'])
+            self.logger.info(u'此楼盘无户型图片:' + item['index_url'])
+            yield item
             
     def parse_item_huxing(self,response):
         item = response.meta['house_item']
@@ -80,7 +82,7 @@ class SinaHouseSpider(CrawlSpider):
             img_src_url_tmp = li.xpath('.//img/@src').extract_first()
             img_src_url = img_src_url_tmp[:(img_src_url_tmp.index('mk7')+3)]+'.jpg'
             size = li.xpath(".//span[@class='infoSpanNum']/span/em/text()").extract_first(default=0)
-            item['house_img_urls'].append((huxing,img_src_url,size))
+            item['house_img_urls'].append([str(uuid.uuid4()).replace('-',''), huxing, size, img_src_url])
             
         
         next_url = response.xpath(u"//span[@class='pagebox_next' and contains(a,'下一页')]/a/@href").extract_first()
@@ -88,9 +90,7 @@ class SinaHouseSpider(CrawlSpider):
             self.logger.debug(u'进入楼盘户型图下一页:' + next_url )
             yield scrapy.Request(url = next_url,meta={'house_item':item},callback=self.parse_item_huxing)
         else:
-            item['house_img_urls'] = len(item['house_img_urls'])
-            self.logger.info(dict(item))
-
+            self.logger.info(u'此楼盘链接处理完毕: ' + item['index_url'])
             yield item
     
     

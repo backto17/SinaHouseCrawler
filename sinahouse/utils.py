@@ -5,7 +5,7 @@ import logging
 from scrapy import logformatter
 
 class semaphore_thread(threading.Thread):
-    semaphore = threading.Semaphore(16)
+    semaphore = threading.Semaphore(32)
     def __init__(self,target=None,args=()):
         super(semaphore_thread, self).__init__()
         self.func = target
@@ -29,3 +29,5 @@ class PoliteLogFormatter(logformatter.LogFormatter):
                 'item': item,
             }
         }
+
+

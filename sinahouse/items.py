@@ -30,12 +30,12 @@ class SinaHouseItem(scrapy.Item):
     open_date = scrapy.Field()  
     check_in_date = scrapy.Field()
     house_img_urls = scrapy.Field()
-    cover_urls = scrapy.Field()   
+    cover_url = scrapy.Field()   
     household_size = scrapy.Field()
     per_square_price = scrapy.Field()
     decoration = scrapy.Field()
     property_type = scrapy.Field()
     construction_area = scrapy.Field()
-    
+    image_paths = scrapy.Field()
     
     

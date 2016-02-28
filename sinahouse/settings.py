@@ -7,46 +7,63 @@ SPIDER_MODULES = ['sinahouse.spiders']
 NEWSPIDER_MODULE = 'sinahouse.spiders'
 DOWNLOAD_HANDLERS = {'s3': None,}
 
-LOG_FORMATTER = 'sinahouse.utils.PoliteLogFormatter'
+# AUTOTHROTTLE_ENABLED = True
 
+# LOG_FORMATTER = 'sinahouse.utils.PoliteLogFormatter'
 SOURCE = 15
-IMAGE_PATH = 'F:/data/sina/upload/'
-# LOG_FILE = 'SinaHouse_' + str(datetime.date.today()) +  '.log'
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'sinahouse (+http://www.yourdomain.com)'
 
-MAIL_FROM = 'google_lover@163.com'
-MAIL_HOST = 'smtp.163.com'
+IMAGE_PATH = 'F:/data/sinahouse/upload/'
+IMAGES_STORE = 'F:/data/sinahouse/Image_store/'
+
+LOG_FILE = 'SinaHouse_' + str(datetime.datetime.today()).replace(' ','_').replace('-','_').replace(':','_') +  '.log'
+LOG_LEVEL = 'DEBUG'
+
+MONGO_HOST = "localhost"
+MONGO_PORT = 27017
+MONGO_DATABASE = "sinahouse"
+MONGO_COLLECTION = 'custom_item'
+
+
+
+
+#################################################  settings for mailsender  #################################################
+
+MAIL_FROM = 'ALEX.LIN@xxx.com'
+MAIL_HOST = 'smtp.xxx.com'
 MAIL_PORT = 25
-MAIL_PASS = '1510720336'
-MAIL_USER = 'google_lover@163.com'
-STATSMAILER_RCPTS = ['lingang_upc@163.com',]
+MAIL_PASS = 'password'
+MAIL_USER = 'ALEX.LIN@xxx.com'
+STATSMAILER_RCPTS = ['ALEX.LIN@xxx.com',]
 
-CONCURRENT_ITEMS = 60
-REACTOR_THREADPOOL_MAXSIZE = 20
+##############################################################################################################################
+
+CONCURRENT_ITEMS = 100
+REACTOR_THREADPOOL_MAXSIZE = 10
 HTTPCACHE_ENABLED = False
-CONCURRENT_REQUESTS = 30
+CONCURRENT_REQUESTS = 10
 # Disable cookies (enabled by default)
 COOKIES_ENABLED=False
-CONCURRENT_REQUESTS_PER_DOMAIN = 640
+CONCURRENT_REQUESTS_PER_DOMAIN = 10
 DOWNLOADER_MIDDLEWARES = {
     'sinahouse.middlewares.UserAgentMiddleware': 730,
-#     'sinahouse.middlewares.ProxyMiddleware': 740,
-#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+#     'sinahouse.middlewares.ProxyMiddleware': 735,
+#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 740,
 }
 
 EXTENSIONS = {
             'scrapy.telnet.TelnetConsole': 200,
-            'scrapy.extensions.statsmailer.StatsMailer': 500,
+#             'scrapy.extensions.statsmailer.StatsMailer': 500,
 }
 
 
 ITEM_PIPELINES = {
                 'sinahouse.pipelines.MongoPipeline':100,
+#                 'sinahouse.pipelines.ImagePipeline':200,
+                'sinahouse.pipelines.CustomImagesPipeline': 20,
 }
 
 
-LOG_LEVEL = 'DEBUG'
+
 
 USER_AGENTS = [
     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
@@ -88,15 +105,21 @@ PROXIES = [
 
 #################################################  settings for scrapy-redis  #################################################
 
-# Enables scheduling storing requests queue in redis.
+# Max idle time to prevent the spider from being closed when distributed crawling.
+# This only works if queue class is SpiderQueue or SpiderStack,
+# and may also block the same time when your spider start at the first time (because the queue is empty).
+SCHEDULER_IDLE_BEFORE_CLOSE = 10
+  
+#Enables scheduling storing requests queue in redis.
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
- 
+    
 # Don't cleanup redis queues, allows to pause/resume crawls.
-SCHEDULER_PERSIST = True
- 
+SCHEDULER_PERSIST = False
+    
 # Schedule requests using a priority queue. (default)
-SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
- 
+SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
+# SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
+    
 REDIS_HOST = '192.168.3.225'
 REDIS_PORT = 6379
 
