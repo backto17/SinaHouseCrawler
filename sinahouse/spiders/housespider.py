@@ -14,14 +14,13 @@ class SinaHouseSpider(CrawlSpider):
     allowed_domains = ['house.sina.com.cn']
     start_urls = ['http://data.house.sina.com.cn/sc/search/?keyword=&charset=utf8',]
     rules = [
-            Rule(LinkExtractor(allow = ('.*\.cn/\w+\d+\?wt_source.*?bt.*')),callback='parse_item',follow=False),
-#             Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/sc/search/$')),process_links="parse_city_links"), #各个城市链接提取
-#              Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/\w+/search-\d*/\?bcity=\w*$'))), #
-            Rule(LinkExtractor(allow = ('/sc/search-\d*/.*'))),
+            Rule(LinkExtractor(allow = ('.*\.cn/\w+\d+\?wt_source.*?bt.*')),callback='parse_item',follow=False), #楼盘链接提取
+            Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/\w+/search/$')),process_links="parse_city_links"), #各个城市链接提取
+            Rule(LinkExtractor(allow = ('/\w+/search-\d*/.*'))), #下一页链接
  
             ]
 
-#    LinkExtractor 自动补全了url路径 故省略
+#    下一页链接url提取出来实际是相对路径,LinkExtractor自动补全了url路径 故省略
 #     ,process_links="parse_city_next_links"
 #     def parse_city_next_links(self,links):
 #         for link in links:
