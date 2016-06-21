@@ -1,21 +1,26 @@
 # coding:utf-8
 # author:alex lin
+
 import re
 import uuid
+
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
+
 from sinahouse.items import SinaHouseItem
 from sinahouse import settings
 
 
 class SinaHouseSpider(CrawlSpider):
+    """新浪房产爬虫: http://sh.house.sina.com.cn/"""
     name = 'sinahouse'
     allowed_domains = ['house.sina.com.cn']
     start_urls = ['http://data.house.sina.com.cn/sc/search/?keyword=&charset=utf8',]
     rules = [
-            Rule(LinkExtractor(allow = ('.*\.cn/\w+\d+\?wt_source.*?bt.*')),callback='parse_item',follow=False), #楼盘链接提取
-            Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/\w+/search/$')),process_links="parse_city_links"), #各个城市链接提取
+            Rule(LinkExtractor(allow = ('.*\.cn/\w+\d+/#wt_source.*?bt.*')),callback='parse_item',follow=False), #具体楼盘链接提取
+            Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/\w+/search$')),process_links="parse_city_links"), #各个城市链接提取
+            Rule(LinkExtractor(allow = ('^http://data.house.sina.com.cn/\w+/search/\?bcity.*'))), #各个省份下有其他城市的链接提取
             Rule(LinkExtractor(allow = ('/\w+/search-\d*/.*'))), #下一页链接
  
             ]
@@ -26,16 +31,19 @@ class SinaHouseSpider(CrawlSpider):
 #         for link in links:
 #             link.url = "http://data.house.sina.com.cn" + link.url
 #         return links
+
+    # 当时网站提取出的链接,直接跟进,会报服务器错误(网站自身原因,估计某个程序员该扣绩效了,哈哈),追加后缀就可以正常打开
     def parse_city_links(self,links):
         for link in links:
             link.url = link.url +'?keyword=&charset=utf8'
         return links
         
     def parse_item(self,response):
+        """提取楼盘信息详情"""
         item = SinaHouseItem()
         item['source_id'] = settings.SOURCE
         item['save_path'] = settings.IMAGE_PATH
-        item['community_name'] = response.xpath('/html/body/div[1]/div[9]/div[1]/h2/text()').extract_first()
+        item['community_name'] = response.xpath('//h1/text()').extract_first()
         item['index_url'] = response.url
         item['open_date'] = '-'.join(re.findall('(\d+)',response.xpath(u"//*[@id='callmeBtn']/ul/li[4]/span[2]/text()").extract_first(default=u'待定').strip()))
         item['check_in_date'] = '-'.join(re.findall('(\d+)',response.xpath(u'(//*[@id="callmeBtn"]//div[@title])[2]/@title').extract_first(default=u'待定')))
@@ -51,7 +59,8 @@ class SinaHouseSpider(CrawlSpider):
         item['property_type'] = response.xpath("//div[@class='info wm']/ul/li[6]/text()").extract_first(default=u'未知').strip()
         item['decoration'] = response.xpath("//div[@class='info wm']/ul/li[12]/text()").extract_first(default=u'未知').strip()
         item['per_square_price'] = response.xpath("//*[@id='callmeBtn']/ul/li[1]/em[1]/text()").extract_first(default=u'未知').strip()
-
+        
+        #楼盘户型图首页
         image_index_url = response.xpath('/html/body/div[1]/div[10]/ul/li[4]/a/@href').extract_first()
         
 #         from scrapy.shell import inspect_response
@@ -63,6 +72,7 @@ class SinaHouseSpider(CrawlSpider):
             yield item
     
     def parse_item_image(self,response):
+        """楼盘户型图处理"""
         item = response.meta["house_item"]
         item['house_img_urls'] = []
         huxing_index_url = response.xpath(u"//div[@class='housingNav w']//li[contains(a,'户型图')]/a/@href").extract_first()
@@ -74,6 +84,7 @@ class SinaHouseSpider(CrawlSpider):
             yield item
             
     def parse_item_huxing(self,response):
+        """户型图处理"""
         item = response.meta['house_item']
         lis = response.xpath("//div[@class='housingShow']//li")
         for li in lis:
@@ -82,8 +93,7 @@ class SinaHouseSpider(CrawlSpider):
             img_src_url = img_src_url_tmp[:(img_src_url_tmp.index('mk7')+3)]+'.jpg'
             size = li.xpath(".//span[@class='infoSpanNum']/span/em/text()").extract_first(default=0)
             item['house_img_urls'].append([str(uuid.uuid4()).replace('-',''), huxing, size, img_src_url])
-            
-        
+                    
         next_url = response.xpath(u"//span[@class='pagebox_next' and contains(a,'下一页')]/a/@href").extract_first()
         if next_url:
             self.logger.debug(u'进入楼盘户型图下一页:' + next_url )
