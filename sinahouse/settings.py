@@ -120,16 +120,20 @@ PROXIES = [
 SCHEDULER_IDLE_BEFORE_CLOSE = 10
   
 #Enables scheduling storing requests queue in redis.
-SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
     
 # Don't cleanup redis queues, allows to pause/resume crawls.
 SCHEDULER_PERSIST = False
     
 # Schedule requests using a priority queue. (default)
-SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
+# SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
 # SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
     
 REDIS_HOST = '192.168.3.225'
 REDIS_PORT = 6379
 
 ################################################################################################################################
+try:
+    from settings_local import *
+except:
+    pass
