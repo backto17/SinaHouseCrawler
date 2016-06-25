@@ -18,10 +18,10 @@ IMAGES_STORE = 'F:/data/sinahouse/Image_store/'
 LOG_FILE = 'SinaHouse_' + str(datetime.datetime.today()).replace(' ','_').replace('-','_').replace(':','_') +  '.log'
 LOG_LEVEL = 'DEBUG'
 
-MONGO_HOST = "localhost"
-MONGO_PORT = 27017
-MONGO_DATABASE = "sinahouse"
-MONGO_COLLECTION = 'custom_item'
+# MONGO_HOST = "localhost"
+# MONGO_PORT = 27017
+# MONGO_DATABASE = "sinahouse"
+# MONGO_COLLECTION = 'custom_item'
 
 #################################################  settings for mysql  #################################################
 MYSQL_INFO = {
@@ -46,7 +46,7 @@ STATSMAILER_RCPTS = ['ALEX.LIN@xxx.com',]
 
 ##############################################################################################################################
 
-CONCURRENT_ITEMS = 100
+CONCURRENT_ITEMS = 10
 REACTOR_THREADPOOL_MAXSIZE = 10
 HTTPCACHE_ENABLED = False
 CONCURRENT_REQUESTS = 10
@@ -54,7 +54,7 @@ CONCURRENT_REQUESTS = 10
 COOKIES_ENABLED=False
 CONCURRENT_REQUESTS_PER_DOMAIN = 10
 DOWNLOADER_MIDDLEWARES = {
-    'sinahouse.middlewares.UserAgentMiddleware': 730,
+#     'sinahouse.middlewares.UserAgentMiddleware': 730,
 #     'sinahouse.middlewares.ProxyMiddleware': 735,
 #     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 740,
 }
@@ -66,9 +66,9 @@ EXTENSIONS = {
 
 
 ITEM_PIPELINES = {
-                'sinahouse.pipelines.MongoPipeline':100,
+#                 'sinahouse.pipelines.MongoPipeline':100,
 #                 'sinahouse.pipelines.ImagePipeline':200,
-                'sinahouse.pipelines.CustomImagesPipeline': 20,
+#                 'sinahouse.pipelines.CustomImagesPipeline': 20,
 }
 
 
@@ -117,20 +117,20 @@ PROXIES = [
 # Max idle time to prevent the spider from being closed when distributed crawling.
 # This only works if queue class is SpiderQueue or SpiderStack,
 # and may also block the same time when your spider start at the first time (because the queue is empty).
-SCHEDULER_IDLE_BEFORE_CLOSE = 10
+# SCHEDULER_IDLE_BEFORE_CLOSE = 10
   
 #Enables scheduling storing requests queue in redis.
 # SCHEDULER = "scrapy_redis.scheduler.Scheduler"
     
 # Don't cleanup redis queues, allows to pause/resume crawls.
-SCHEDULER_PERSIST = False
+# SCHEDULER_PERSIST = False
     
 # Schedule requests using a priority queue. (default)
 # SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
 # SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
     
-REDIS_HOST = '192.168.3.225'
-REDIS_PORT = 6379
+# REDIS_HOST = '192.168.3.225'
+# REDIS_PORT = 6379
 
 ################################################################################################################################
 try:
