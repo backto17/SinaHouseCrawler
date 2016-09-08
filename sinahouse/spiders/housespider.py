@@ -52,7 +52,7 @@ class SinaHouseSpider(CrawlSpider):
         item['address'] = response.xpath(u'//*[@id="callmeBtn"]/ul/li[2]/span[2]/text()').extract_first(default=u'未知').strip()
         item['area_name'] = response.xpath("//span[@class='fl']/a[3]//text()").extract_first(default=u'未知').strip()
         item['city_name'] = response.xpath("//span[@class='fl']/a[1]//text()").extract_first(default=u'未知').replace(u'房产','').strip()
-        item['cover_url'] = [response.xpath("//*[@id='con_tab1_con_3']/a/img/@lsrc").extract_first(),str(uuid.uuid4()).replace('-','')]
+        item['cover_url'] = [response.xpath("//*[@id='con_tab1_con_4']/a/img/@lsrc").extract_first(),str(uuid.uuid4()).replace('-','')]
         item['household_size'] = response.xpath("//div[@class='info wm']/ul/li[5]/text()").extract_first(default=u'未知').replace(u'户','').strip()
         item['property_manage_fee'] = response.xpath("//div[@class='info wm']/ul/li[7]/text()").extract_first(default=u'未知').strip()
         item['construction_area'] = response.xpath("//div[@class='info wm']/ul/li[9]/text()").extract_first(default=u'未知').strip()
@@ -62,7 +62,7 @@ class SinaHouseSpider(CrawlSpider):
         
         #楼盘户型图首页
         image_index_url = response.xpath('/html/body/div[1]/div[10]/ul/li[4]/a/@href').extract_first()
-        
+
 #         from scrapy.shell import inspect_response
 #         inspect_response(response, self)
         if image_index_url:
@@ -86,15 +86,17 @@ class SinaHouseSpider(CrawlSpider):
     def parse_item_huxing(self,response):
         """户型图处理"""
         item = response.meta['house_item']
-        lis = response.xpath("//div[@class='housingShow']//li")
+        lis = response.xpath("//ul[@class='sFy03 clearfix']//li")
         for li in lis:
-            huxing = li.xpath(".//span[@class='infoSpan']/span/text()").extract_first(default=u'其他')
+            huxing = li.xpath(".//div[@class='imgBox']/p/text()").extract_first(default=u'其他')
             img_src_url_tmp = li.xpath('.//img/@src').extract_first()
+            # 转换为大图的链接
             img_src_url = img_src_url_tmp[:(img_src_url_tmp.index('mk7')+3)]+'.jpg'
-            size = li.xpath(".//span[@class='infoSpanNum']/span/em/text()").extract_first(default=0)
+            size = li.xpath("./p[1]/em/text()").extract_first(default=0)
             item['house_img_urls'].append([str(uuid.uuid4()).replace('-',''), huxing, size, img_src_url])
-                    
-        next_url = response.xpath(u"//span[@class='pagebox_next' and contains(a,'下一页')]/a/@href").extract_first()
+        
+        # 部分户型图有分页, 如: http://data.house.sina.com.cn/sc127009/huxing/#wt_source=data6_tpdh_hxt       
+        next_url = response.xpath(u"//div[@class='sPageBox']//a[contains(text(),'下一页')]/@href").extract_first()
         if next_url:
             self.logger.debug(u'进入楼盘户型图下一页:' + next_url )
             yield scrapy.Request(url = next_url,meta={'house_item':item},callback=self.parse_item_huxing)
