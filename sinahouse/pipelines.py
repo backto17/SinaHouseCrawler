@@ -55,17 +55,17 @@ class MySQLPipeline(AsyncSqlPipelineBase):
     def _insert(self, cursor, item):
         """
         func: 插入数据库,
-                    建表信息如下:
+        house_info信息如下:
         CREATE TABLE `house_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `house_name` varchar(300) DEFAULT NULL,
-  `house_index_url` varchar(300) DEFAULT NULL,
-  `house_price` varchar(100) DEFAULT NULL,
-  `house_address` varchar(500) DEFAULT NULL,
-  `longtitude_latitude` varchar(100) DEFAULT NULL,
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-)
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `house_name` varchar(300) DEFAULT NULL,
+          `house_index_url` varchar(300) DEFAULT NULL,
+          `house_price` varchar(100) DEFAULT NULL,
+          `house_address` varchar(500) DEFAULT NULL,
+          `longtitude_latitude` varchar(100) DEFAULT NULL,
+          `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (`id`)
+        )
         """
         cursor.execute(""" 
         insert into  house_info(house_name,house_index_url,house_price,house_address,longtitude_latitude)
