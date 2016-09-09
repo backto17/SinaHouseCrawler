@@ -5,6 +5,7 @@
 @author: LG
 '''
 import abc
+import logging
 
 from twisted.enterprise import adbapi
 
@@ -19,7 +20,7 @@ class AsyncSqlPipelineBase(object):
         """
         para: database_info 应该包含对应数据库的连接信息
                     例如：database_info = {
-            'dbapiName': 'MySqldb',
+            'dbapiName': 'MySQLdb',
             'host' : '192.168.3.238',
             'db' : 'test',
             'user' : 'alex',
@@ -31,6 +32,7 @@ class AsyncSqlPipelineBase(object):
         """
         self.dbpool = adbapi.ConnectionPool(**database_info)
         self.stats = stats
+        self.logger = logging.getLogger(__name__)
     
     @classmethod
     def from_crawler(cls, crawler):
