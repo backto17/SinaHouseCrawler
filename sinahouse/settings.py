@@ -15,7 +15,7 @@ SOURCE = 15
 IMAGE_PATH = 'F:/data/sinahouse/upload/'
 IMAGES_STORE = 'F:/data/sinahouse/Image_store/'
 
-LOG_FILE = 'SinaHouse_' + str(datetime.datetime.today()).replace(' ','_').replace('-','_').replace(':','_') +  '.log'
+# LOG_FILE = 'SinaHouse_' + str(datetime.datetime.today()).replace(' ','_').replace('-','_').replace(':','_') +  '.log'
 LOG_LEVEL = 'DEBUG'
 
 # MONGO_HOST = "localhost"
