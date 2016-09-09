@@ -1,6 +1,8 @@
-# coding:utf-8
-# author:alex lin
-
+# coding: utf-8
+'''
+@date: Feb 24, 2016
+@author: alex.lin
+'''
 import re
 
 import scrapy
@@ -12,9 +14,12 @@ from sinahouse import settings
 
 
 class SinaHouseSpider(CrawlSpider):
-    """新浪房产爬虫: http://sh.house.sina.com.cn/"""
+    """
+    class:新浪房产爬虫: http://sh.house.sina.com.cn/
+    """
+    
     name = 'sinahouse'
-    allowed_domains = ['house.sina.com.cn']
+    allowed_domains = ['house.sina.com.cn',]
     start_urls = ['http://data.house.sina.com.cn/sc/search/?keyword=&charset=utf8',]
     rules = [
             Rule(LinkExtractor(allow = ('.*\.cn/\w+\d+/#wt_source.*?bt.*')), callback='parse_house', follow=False), #  具体楼盘链接提取
