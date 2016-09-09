@@ -20,7 +20,7 @@ LOG_FORMATTER = 'sinahouse.utils.PoliteLogFormatter', 实现raise DropItem()时�
 运行前,请先安装 requirements.txt 中的模块!  
 测试方法： 
 ```
-scrapy parse --spider=sinahouse  -c parse_item -d 5 "http://data.house.sina.com.cn/jx108948?wt_source=search_nr_bt02"
+scrapy parse --spider=sinahouse  -c parse_house -d 5 "http://data.house.sina.com.cn/jx108948?wt_source=search_nr_bt02"
 ```
 查看item是否提取成功，item中**字段意义**，请查看**SinaHouseItem**中的注释。    
 
