@@ -11,15 +11,16 @@ from twisted.enterprise import adbapi
 
 class AsyncSqlPipelineBase(object):
     """
-    class:异步写入关系型数据库的基础管道,
+    class:异步写入关系型数据库的基础管道,继承的子类必须完成 process_item方法.
     支持DB-API 2.0 compliant database
     """
     __metaclass__ = abc.ABCMeta
     
     def __init__(self, database_info, stats):
         """
-        para: database_info 应该包含对应数据库的连接信息
-                    例如：database_info = {
+        para: stats , crewler 的stats
+        database_info 应该包含对应数据库的连接信息
+        egg：database_info = {
             'dbapiName': 'MySQLdb',
             'host' : '192.168.3.238',
             'db' : 'test',
@@ -45,6 +46,9 @@ class AsyncSqlPipelineBase(object):
     
     @abc.abstractmethod
     def process_item(self,item, spider):
+        """
+        func: process items as you wish
+        """
         pass
     
     def close_spider(self,spider):
