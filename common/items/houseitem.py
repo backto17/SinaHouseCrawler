@@ -13,14 +13,14 @@ class HouseItemBase(BaseItem):
     class: 房产类的基础Item
     """
     name = scrapy.Field() # 楼盘名称
+    price = scrapy.Field() # 楼盘价格
     open_date = scrapy.Field() # 开盘时间
-    check_in_date = scrapy.Field() # 入住时间
+    checkin_date = scrapy.Field() # 入住时间
     address = scrapy.Field() # 地址(北京某某区某某路...)
     longtitude_latitude = scrapy.Field() # 经度 纬度
     developer = scrapy.Field() # 开发商
+    property_company = scrapy.Field() # 物业公司
     property_manage_fee = scrapy.Field() # 物业费
-    property_manage_com = scrapy.Field() # 物业公司
-    price = scrapy.Field() # 价格
     decoration = scrapy.Field() # 装修情况
     cover_url = scrapy.Field() # 楼盘封面图片
     layout_items = scrapy.Field() # 户型信息
