@@ -5,6 +5,6 @@
 '''
 
 from .baseitem import BaseItem
+from .houseitem import HouseItemBase, HouseLayoutItemBase
 
-
-__all__ = ['BaseItem',]
+__all__ = ['BaseItem', 'HouseItemBase', ]
