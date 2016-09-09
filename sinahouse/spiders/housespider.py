@@ -59,7 +59,7 @@ class SinaHouseSpider(CrawlSpider):
         item['property_type'] = response.xpath("//div[@class='info wm']/ul/li[6]/text()").extract_first(default=u'未知').strip()
         item['decoration'] = response.xpath("//div[@class='info wm']/ul/li[12]/text()").extract_first(default=u'未知').strip()
         item['per_square_price'] = response.xpath("//*[@id='callmeBtn']/ul/li[1]/em[1]/text()").extract_first(default=u'未知').strip()
-        
+        item['longtitude_latitude'] = ','.join([response.xpath('//script').re_first(".*?coordx='(\d+.\d+)'"), response.xpath('//script').re_first(".*?coordy='(\d+.\d+)'.*")])
         #楼盘户型图首页
         image_index_url = response.xpath('/html/body/div[1]/div[10]/ul/li[4]/a/@href').extract_first()
 
