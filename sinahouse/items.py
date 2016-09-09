@@ -18,8 +18,7 @@ class SinaHouseItem(scrapy.Item):
     area_id = scrapy.Field() # 区域id
     area_name = scrapy.Field() # 区域名称(某某区,某某县...)
     address = scrapy.Field() # 地址(北京某某区某某路...)
-    longitude = scrapy.Field() # 经度
-    latitude = scrapy.Field() # 纬度
+    longtitude_latitude = scrapy.Field() # 经度 纬度
     developer = scrapy.Field() # 开发商
     community_desc = scrapy.Field() # 楼盘简介
     property_manage_fee = scrapy.Field() # 物业费
