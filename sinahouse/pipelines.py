@@ -6,6 +6,7 @@ modified on 2016-05-17
 '''
 import threading
 import logging
+import md5
 
 from twisted.enterprise import adbapi
 import pymongo
@@ -80,7 +81,7 @@ class MySQLPipeline(AsyncSqlPipelineBase):
         
 class ImagePipeline(object):
     """
-    利用 threading,requests 下载图片;
+    func:利用 threading,requests 下载图片;
     semaphore_thread 封装了信号量,控制下载线程数
     """
     def __init__(self,image_path):
@@ -95,23 +96,23 @@ class ImagePipeline(object):
         return item
     
     def process_imgage(self,item):
-        self.save_image(*item['cover_url'])
-        for house_img in item['house_img_urls']:
-            self.save_image(house_img[3],house_img[0])
+        item['cover_info']['file_path'] = self.save_image(item['cover_info']['url'])
+        for houselayout in item['layout_items']:
+            houselayout['img_info']['file_path'] = self.save_image(houselayout['img_info']['url'])
             
-    def save_image(self,url,img_id):
+    def save_image(self,url):
         try:
             resp = requests.get(url,timeout=(10,60))
         except requests.exceptions.Timeout:
             logging.debug('requests.exceptions.Timeout: image saving failed in %s',url)
-            return
+            return 
         except Exception:
-            logging.debug('Download Timeout: image saving failed in %s',url)
+            logging.debug('Download Failed: image saving failed in %s',url)
             return
-            
-        image = self.image_path + img_id + '.jpg'
-        with open(image, 'wb') as f:
+        file_path = '%s%s.jpg' % (self.image_path, md5.md5(url).hexdigest())
+        with open(file_path, 'wb') as f:
             f.write(resp.content)
+        return file_path
     
     def close_spider(self,spider):
         for t in threading.enumerate():
