@@ -22,7 +22,7 @@ class HouseItemBase(BaseItem):
     property_company = scrapy.Field() # 物业公司
     property_manage_fee = scrapy.Field() # 物业费
     decoration = scrapy.Field() # 装修情况
-    cover_url = scrapy.Field() # 楼盘封面图片
+    cover_info = scrapy.Field() # 楼盘封面图片
     layout_items = scrapy.Field() # 户型信息
     
 class HouseLayoutItemBase(BaseItem):
@@ -31,5 +31,5 @@ class HouseLayoutItemBase(BaseItem):
     """
     name = scrapy.Field() # 户型名称
     area = scrapy.Field() # 户型面积
-    img_url = scrapy.Field() # 户型图片
+    img_info = scrapy.Field() # 户型图片
     
