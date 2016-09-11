@@ -79,7 +79,7 @@ class MySQLPipeline(AsyncSqlPipelineBase):
         self.logger.error(e)
 
         
-class ImagePipeline(object):
+class ThreadImagePipeline(object):
     """
     func:利用 threading,requests 下载图片;
     semaphore_thread 封装了信号量,控制下载线程数
