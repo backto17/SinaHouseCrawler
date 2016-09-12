@@ -8,7 +8,6 @@ import threading
 import logging
 import md5
 
-from twisted.enterprise import adbapi
 import pymongo
 import scrapy  
 from scrapy.mail import MailSender 
@@ -79,7 +78,7 @@ class MySQLPipeline(AsyncSqlPipelineBase):
         self.logger.error(e)
 
         
-class ThreadImagePipeline(object):
+class ThreadImagesPipeline(object):
     """
     func:利用 threading,requests 下载图片;
     semaphore_thread 封装了信号量,控制下载线程数
@@ -100,19 +99,28 @@ class ThreadImagePipeline(object):
         for houselayout in item['layout_items']:
             houselayout['img_info']['file_path'] = self.save_image(houselayout['img_info']['url'])
             
-    def save_image(self,url):
-        try:
-            resp = requests.get(url,timeout=(10,60))
-        except requests.exceptions.Timeout:
-            logging.debug('requests.exceptions.Timeout: image saving failed in %s',url)
-            return 
-        except Exception:
-            logging.debug('Download Failed: image saving failed in %s',url)
-            return
+    def save_image(self,url, retry=2):
+        while retry:
+            try:
+                resp = requests.get(url,timeout=(10,60))
+                break
+            except requests.exceptions.Timeout:
+                if retry:
+                    retry -= 1
+                    continue
+                logging.error('requests.exceptions.Timeout: image saving failed in %s',url)
+                return 
+            except Exception as e:
+                if retry:
+                    retry -= 1
+                    continue
+                logging.error('Download Failed: image saving failed in %s, Exception: %s', url, e)
+                return
+            
         file_path = '%s%s.jpg' % (self.image_path, md5.md5(url).hexdigest())
         with open(file_path, 'wb') as f:
             f.write(resp.content)
-        return file_path
+            return file_path
     
     def close_spider(self,spider):
         for t in threading.enumerate():
@@ -126,12 +134,15 @@ class CustomImagesPipeline(ImagesPipeline):
     实现自己的功能需求
     """
     def get_media_requests(self, item, info):
-        for image_id,huxing,size,image_url in item['house_img_urls']:
-            yield scrapy.Request(image_url)
+        if item['cover_info']['url']:
+            yield scrapy.Request(item['cover_info']['url'])
+        for layout in item['layout_items']:
+            yield scrapy.Request(layout['img_info']['url'])
             
     def item_completed(self, results, item, info):
-        image_paths = [x['path'] for ok, x in results if ok]
-        if not image_paths:
-            raise DropItem("Item contains no images")
-        item['image_paths'] = image_paths
+        if item['cover_info']['url']:
+            item['cover_info']['path'] = results[0][1]['path'] if results[0][0] else ''
+            results = results[1:]
+        for i,(ok, result) in enumerate(results):
+            item['layout_items'][i]['img_info']['path'] = result['path'] if ok else ''
         return item
