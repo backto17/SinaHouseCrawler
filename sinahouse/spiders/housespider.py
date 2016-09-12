@@ -44,7 +44,7 @@ class SinaHouseSpider(CrawlSpider):
         item['developer'] = response.xpath(u"//div[@class='info wm']/ul/li[3]/text()").extract_first(default=u'未知').strip()
         item['property_company'] = response.xpath(u"//li[contains(span,'物业公司')]/text()").extract_first(default=u'未知').strip()
         item['decoration'] = response.xpath("//div[@class='info wm']/ul/li[12]/text()").extract_first(default=u'未知').strip()
-        
+        item['cover_info'] = {'url': response.xpath("//*[@id='con_tab1_con_4']/a/img/@lsrc").extract_first(),}
         # 楼盘户型图首页
         houselayout_index_url = response.xpath('/html/body/div[1]/div[10]/ul/li[4]/a/@href').extract_first()
 
@@ -79,7 +79,7 @@ class SinaHouseSpider(CrawlSpider):
             houselayout['name'] = layout.xpath(".//div[@class='imgBox']/p/text()").extract_first(default=u'其他')
             img_url_tmp = layout.xpath('.//img/@src').extract_first()
             # 转换为大图的链接
-            houselayout['img_url'] = img_url_tmp[:(img_url_tmp.index('mk7')+3)]+'.jpg'
+            houselayout['img_info'] = {'url': '%s.jpg' % img_url_tmp[:(img_url_tmp.index('mk7')+3)],}
             houselayout['area'] = layout.xpath("./p[1]/em/text()").extract_first(default=0)
             item['layout_items'].append(dict(houselayout))
         

@@ -67,7 +67,7 @@ EXTENSIONS = {
 
 ITEM_PIPELINES = {
 #                 'sinahouse.pipelines.MongoPipeline':100,
-#                 'sinahouse.pipelines.ImagePipeline':200,
+#                 'sinahouse.pipelines.ThreadImagePipeline':200,
 #                 'sinahouse.pipelines.CustomImagesPipeline': 20,
 }
 
