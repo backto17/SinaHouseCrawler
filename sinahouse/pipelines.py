@@ -7,6 +7,7 @@ modified on 2016-05-17
 import threading
 import logging
 import md5
+import os 
 
 import pymongo
 import scrapy  
@@ -116,8 +117,8 @@ class ThreadImagesPipeline(object):
                     continue
                 logging.error('Download Failed: image saving failed in %s, Exception: %s', url, e)
                 return
-            
-        file_path = '%s%s.jpg' % (self.image_path, md5.md5(url).hexdigest())
+   
+        file_path = '%s%s%s.jpg' % (self.image_path, os.path.sep, md5.md5(url).hexdigest())
         with open(file_path, 'wb') as f:
             f.write(resp.content)
             return file_path
