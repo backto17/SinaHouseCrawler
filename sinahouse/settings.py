@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import os
 
 BOT_NAME = 'sinahouse'
 SPIDER_MODULES = ['sinahouse.spiders']
@@ -12,8 +13,9 @@ DOWNLOAD_HANDLERS = {'s3': None,}
 # LOG_FORMATTER = 'sinahouse.utils.PoliteLogFormatter'
 SOURCE = 15
 
-IMAGE_PATH = 'F:/data/sinahouse/upload/'
-IMAGES_STORE = 'F:/data/sinahouse/Image_store/'
+
+IMAGE_PATH = os.path.join(os.path.abspath('.'),'images')
+IMAGES_STORE = os.path.join(os.path.abspath('.'),'images_store')
 
 # LOG_FILE = 'SinaHouse_' + str(datetime.datetime.today()).replace(' ','_').replace('-','_').replace(':','_') +  '.log'
 LOG_LEVEL = 'DEBUG'
@@ -67,7 +69,7 @@ EXTENSIONS = {
 
 ITEM_PIPELINES = {
 #                 'sinahouse.pipelines.MongoPipeline':100,
-#                 'sinahouse.pipelines.ThreadImagePipeline':200,
+#                 'sinahouse.pipelines.ThreadImagesPipeline':200,
 #                 'sinahouse.pipelines.CustomImagesPipeline': 20,
 }
 
