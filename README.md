@@ -7,7 +7,7 @@
 
 2. 'sinahouse.middlewares.UserAgentMiddleware','sinahouse.middlewares.ProxyMiddleware' 分别实现用户代理UserAgent变换和IP代理变换
 
-3. 'sinahouse.pipelines.ImagePipeline','sinahouse.pipelines.CustomImagesPipeline'分别是基于多线程的图片下载保存和继承scrapy自带  ImagePipline的实现的图片下载保存
+3. 'sinahouse.pipelines.ThreadImagesPipeline','sinahouse.pipelines.CustomImagesPipeline'分别是基于多线程将图片下载保存到images文件夹和继承scrapy自带  ImagePipline的实现的图片下载保存到images_store
 
 4. 'scrapy.extensions.statsmailer.StatsMailer'是通过设置settings中的mai等相关参数实现发送爬虫运行状态信息到指定邮件.scrapy.mail中的  MailSender也可以实现发送自定义内容邮件 
 
