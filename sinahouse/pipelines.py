@@ -59,9 +59,10 @@ class MySQLPipeline(AsyncSqlPipelineBase):
         """
         cursor.execute(""" 
         insert into  house(
-        name, url, price, open_date, address, lon_lat, developer, property_company,
-         property_manage_fee, decoration, cover_path, source_id, create_time)
-        values (%(name)s,%s,%s,%s,%s)""",(item['community_name'],item['index_url'],item['per_square_price'],item['address'],item['longtitude_latitude']))
+        name, price, open_date, address, lon_lat, developer, property_company,
+         property_manage_fee, decoration, cover_path, source_id, url,create_time)
+        values (%(name)s, %(price)s, %(open_date)s, %(address)s, %(lon_lat)s ,%(developer)s ,%(property_company)s ,%(property_manage_fee)s ,%(decoration)s  ,%(cover_path)s ,%(source_id)s ,%(url)s ,%(create_time)s
+        )""", dict(item))
         
         self.stats.inc_value('mysql_items_added', count=1, start=0)
              
@@ -87,9 +88,9 @@ class ThreadImagesPipeline(object):
         return item
     
     def process_imgage(self,item):
-        item['cover_info']['file_path'] = self.save_image(item['cover_info']['url'])
+        item['cover_path'] = self.save_image(item['cover_url'])
         for houselayout in item['layout_items']:
-            houselayout['img_info']['file_path'] = self.save_image(houselayout['img_info']['url'])
+            houselayout['img_path'] = self.save_image(houselayout['img_url'])
             
     def save_image(self,url, retry=2):
         while retry:
@@ -126,15 +127,15 @@ class CustomImagesPipeline(ImagesPipeline):
     实现自己的功能需求
     """
     def get_media_requests(self, item, info):
-        if item['cover_info']['url']:
-            yield scrapy.Request(item['cover_info']['url'])
+        if item['cover_url']:
+            yield scrapy.Request(item['cover_url'])
         for layout in item['layout_items']:
-            yield scrapy.Request(layout['img_info']['url'])
+            yield scrapy.Request(layout['img_url'])
             
     def item_completed(self, results, item, info):
-        if item['cover_info']['url']:
-            item['cover_info']['path'] = results[0][1]['path'] if results[0][0] else ''
+        if item['cover_url']:
+            item['cover_path'] = results[0][1]['path'] if results[0][0] else None
             results = results[1:]
         for i,(ok, result) in enumerate(results):
-            item['layout_items'][i]['img_info']['path'] = result['path'] if ok else ''
+            item['layout_items'][i]['img_path'] = result['path'] if ok else None
         return item
