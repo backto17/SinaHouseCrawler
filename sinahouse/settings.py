@@ -26,15 +26,15 @@ LOG_LEVEL = 'DEBUG'
 # MONGO_COLLECTION = 'custom_item'
 
 #################################################  settings for mysql  #################################################
-# DATABASE_INFO = {
-#             'host' : '192.168.3.238',
-#             'db' : 'test',
-#             'user' : 'alex',
-#             'passwd' : 'alex',
-# #             'cursorclass' : MySQLdb.cursors.DictCursor,
-#             'charset' : 'utf8',
-#             'use_unicode' : True
-#             }
+DATABASE_INFO = {
+            'host' : '192.168.3.238',
+            'db' : 'test',
+            'user' : 'alex',
+            'passwd' : 'alex',
+#             'cursorclass' : MySQLdb.cursors.DictCursor,
+            'charset' : 'utf8',
+            'use_unicode' : True
+            }
 
 
 #################################################  settings for mailsender  #################################################
