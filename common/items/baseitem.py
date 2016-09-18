@@ -13,4 +13,4 @@ class BaseItem(Item):
     project = Field() # 项目名字
     spider = Field() # 爬虫名字
     server = Field() # 服务器
-    date = Field() # 爬取时间
+    create_time = Field() # 爬取时间
