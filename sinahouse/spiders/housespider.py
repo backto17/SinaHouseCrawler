@@ -86,6 +86,7 @@ class SinaHouseSpider(CrawlSpider):
             houselayout['img_url'] = '%s.jpg' % img_url_tmp[:(img_url_tmp.index('mk7')+3)]
             houselayout['img_path'] = None
             houselayout['area'] = layout.xpath("./p[1]/em/text()").extract_first(default=0)
+            houselayout['price'] = '%s%s' %(layout.xpath('./p[2]/em/text()').extract_first(''), layout.xpath('./p[2]/text()[2]').extract_first(''))
             item['layout_items'].append(dict(houselayout))
         
         # 部分户型图有分页, 如: http://data.house.sina.com.cn/sc127009/huxing/#wt_source=data6_tpdh_hxt       
