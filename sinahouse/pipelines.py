@@ -63,9 +63,16 @@ class MySQLPipeline(AsyncSqlPipelineBase):
          property_manage_fee, decoration, cover_path, source_id, url,create_time)
         values (%(name)s, %(price)s, %(open_date)s, %(address)s, %(lon_lat)s ,%(developer)s ,%(property_company)s ,%(property_manage_fee)s ,%(decoration)s  ,%(cover_path)s ,%(source_id)s ,%(url)s ,%(create_time)s
         )""", dict(item))
-        
+        house_id = cursor.lastrowid 
+        self.logger.info('source_id:%s, name: %s, id: %s',item['source_id'],item['name'],house_id)
         self.stats.inc_value('mysql_items_added', count=1, start=0)
-             
+        for houselayout in item['layout_items']:
+            houselayout['house_id'] = house_id
+            cursor.execute("""
+            insert into house_layout(house_id, name, area, img_path, price)
+            values (%(house_id)s, %(name)s, %(area)s, %(img_path)s, %(price)s)
+            """, houselayout)
+            
     def _handle_error(self,e):
         self.stats.inc_value('mysql_items_failed', count=1, start=0)
         self.logger.error(e)
