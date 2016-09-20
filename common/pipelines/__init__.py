@@ -4,5 +4,6 @@
 @author: alex.lin
 '''
 from sqldbpipeline import AsyncSqlPipelineBase
+from removeduplicatepipeline import RemoveDuplicatePipeline
 
-__all__ = ['AsyncSqlPipelineBase', ]
+__all__ = ['AsyncSqlPipelineBase', 'RemoveDuplicatePipeline']
