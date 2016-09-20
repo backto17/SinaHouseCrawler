@@ -11,7 +11,6 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
 from sinahouse.items import SinaHouseItem, SinaHouseLayout
-from sinahouse import settings
 
 
 class SinaHouseSpider(CrawlSpider):
@@ -35,7 +34,7 @@ class SinaHouseSpider(CrawlSpider):
         """
         item = SinaHouseItem()
         item['create_time'] = datetime.datetime.now()
-        item['source_id'] = re.search(r'.*?(?P<source_id>\d{4,})', response.url).groupdict('source_id')['source_id']
+        item['source_id'] = int(re.search(r'.*?(?P<source_id>\d{1,})', response.url).groupdict('source_id')['source_id'])
         item['name'] = response.xpath('//h1/text()').extract_first()
         item['price'] = ''.join(response.xpath("//*[@id='callmeBtn']/ul/li[1]/em[1]/text() | //*[@id='callmeBtn']/ul/li[1]/em[2]/text() ").extract()) or u'未知'
         item['url'] = response.url
