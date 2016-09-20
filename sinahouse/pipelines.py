@@ -15,8 +15,9 @@ from scrapy.mail import MailSender
 from scrapy.exceptions import DropItem
 from scrapy.pipelines.images import ImagesPipeline
 import requests
-from common.pipelines import AsyncSqlPipelineBase
+import MySQLdb
 
+from common.pipelines import AsyncSqlPipelineBase, RemoveDuplicatePipeline
 from utils import semaphore_thread
 
 logging.getLogger("requests").setLevel(logging.WARNING)
@@ -146,3 +147,18 @@ class CustomImagesPipeline(ImagesPipeline):
         for i,(ok, result) in enumerate(results):
             item['layout_items'][i]['img_path'] = result['path'] if ok else None
         return item
+
+class SinaHouseRemoveDuplicatePipeline(RemoveDuplicatePipeline):
+    """
+    class: 新浪房产的去重pipeline
+    """
+    def open_spider(self, spider):
+        database_info = spider.settings.get('DATABASE_INFO')
+        database_info.pop('dbapiName')
+        connection = MySQLdb.connect(**database_info)
+        cursor = connection.cursor()
+        cursor.execute('select distinct source_id from house')
+        source_ids = cursor.fetchall()
+        for (source_id,) in source_ids:
+            self.records.add(source_id)
+        
