@@ -10,27 +10,43 @@ DOWNLOAD_HANDLERS = {'s3': None,}
 
 # AUTOTHROTTLE_ENABLED = True
 
+COOKIES_ENABLED=False
+CONCURRENT_ITEMS = 10
+CONCURRENT_REQUESTS = 10
+CONCURRENT_REQUESTS_PER_DOMAIN = 10
+
+DEPTH_LIMIT = 8
+DOWNLOAD_TIMEOUT = 20
+DOWNLOAD_DELAY = 0.02 
+
+HTTPCACHE_ENABLED = False
+
+REDIRECT_ENABLED = False
+RETRY_ENABLED = True
+REACTOR_THREADPOOL_MAXSIZE = 30
+
 # LOG_FORMATTER = 'sinahouse.utils.PoliteLogFormatter'
-SOURCE = 15
 
 
 IMAGE_PATH = os.path.join(os.path.abspath('.'),'images')
 IMAGES_STORE = os.path.join(os.path.abspath('.'),'images_store')
 
-# LOG_FILE = 'SinaHouse_' + str(datetime.datetime.today()).replace(' ','_').replace('-','_').replace(':','_') +  '.log'
+# LOG_ENABLED = False
+LOG_FILE = '%s%s%s' % ('sinahouse_',datetime.datetime.now().strftime('%Y%m%d%H%M%S'),'.log')
 LOG_LEVEL = 'DEBUG'
 
 # MONGO_HOST = "localhost"
 # MONGO_PORT = 27017
 # MONGO_DATABASE = "sinahouse"
-# MONGO_COLLECTION = 'custom_item'
+# MONGO_COLLECTION = 'sina_item'
 
 #################################################  settings for mysql  #################################################
 DATABASE_INFO = {
-            'host' : '192.168.3.238',
-            'db' : 'test',
-            'user' : 'alex',
-            'passwd' : 'alex',
+            'dbapiName': 'MySQLdb',
+            'host' : '192.168.3.170',
+            'db' : 'sina',
+            'user' : 'sina',
+            'passwd' : '123456',
 #             'cursorclass' : MySQLdb.cursors.DictCursor,
             'charset' : 'utf8',
             'use_unicode' : True
@@ -48,15 +64,9 @@ STATSMAILER_RCPTS = ['ALEX.LIN@xxx.com',]
 
 ##############################################################################################################################
 
-CONCURRENT_ITEMS = 10
-REACTOR_THREADPOOL_MAXSIZE = 10
-HTTPCACHE_ENABLED = False
-CONCURRENT_REQUESTS = 10
-# Disable cookies (enabled by default)
-COOKIES_ENABLED=False
-CONCURRENT_REQUESTS_PER_DOMAIN = 10
+
 DOWNLOADER_MIDDLEWARES = {
-#     'sinahouse.middlewares.UserAgentMiddleware': 730,
+    'sinahouse.middlewares.UserAgentMiddleware': 730,
 #     'sinahouse.middlewares.ProxyMiddleware': 735,
 #     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 740,
 }
@@ -68,9 +78,13 @@ EXTENSIONS = {
 
 
 ITEM_PIPELINES = {
-#                 'sinahouse.pipelines.MongoPipeline':100,
-#                 'sinahouse.pipelines.ThreadImagesPipeline':200,
-#                 'sinahouse.pipelines.CustomImagesPipeline': 20,
+                  'common.pipelines.RemoveDuplicatePipeline': 50,
+#                 'sinahouse.pipelines.SinaHouseRemoveDuplicatePipeline' : 100,
+#                   'sinahouse.pipelines.ThreadImagesPipeline': 200,
+#                   'sinahouse.pipelines.CustomImagesPipeline': 300,
+#                   'sinahouse.pipelines.MongoPipeline':400,
+#                 'sinahouse.pipelines.MySQLPipeline': 500,
+                
 }
 
 
