@@ -32,6 +32,8 @@ class SinaHouseSpider(CrawlSpider):
         """
         func:提取楼盘信息
         """
+#         from scrapy.shell import inspect_response
+#         inspect_response(response, self)
         item = SinaHouseItem()
         item['create_time'] = datetime.datetime.now()
         item['source_id'] = int(re.search(r'.*?(?P<source_id>\d{1,})', response.url).groupdict('source_id')['source_id'])
