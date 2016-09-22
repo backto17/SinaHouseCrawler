@@ -5,7 +5,7 @@
 '''
 import scrapy
 
-from .baseitem import BaseItem
+from common.items.base import BaseItem
 
 
 class HouseItemBase(BaseItem):
