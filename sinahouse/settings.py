@@ -66,8 +66,8 @@ STATSMAILER_RCPTS = ['ALEX.LIN@xxx.com',]
 
 
 DOWNLOADER_MIDDLEWARES = {
-    'sinahouse.middlewares.UserAgentMiddleware': 730,
-#     'sinahouse.middlewares.ProxyMiddleware': 735,
+    'common.middlewares.useragent.UserAgentMiddleware': 730,
+#     'common.middlewares.proxy.ProxyMiddleware': 735,
 #     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 740,
 }
 
