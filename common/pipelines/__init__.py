@@ -3,7 +3,7 @@
 @date: 2016-09-08
 @author: alex.lin
 '''
-from sqldbpipeline import AsyncSqlPipelineBase
-from removeduplicatepipeline import RemoveDuplicatePipeline
+from common.pipelines.relationaldb import AsyncSqlPipelineBase
+from common.pipelines.removeduplicate import RemoveDuplicatePipeline
 
 __all__ = ['AsyncSqlPipelineBase', 'RemoveDuplicatePipeline']
