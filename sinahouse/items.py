@@ -7,7 +7,7 @@
 
 import scrapy
 
-from common.items import HouseItemBase, HouseLayoutItemBase
+from common.items.house import HouseItemBase, HouseLayoutItemBase
 
 class SinaHouseLayout(HouseLayoutItemBase):
     price = scrapy.Field() # 此户型价格
