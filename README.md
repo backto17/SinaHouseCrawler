@@ -23,7 +23,7 @@
 
 1. 'sinahouse.pipelines.MongoPipeline'实现数据持久化到mongodb,'sinahouse.pipelines.MySQLPipeline'实现数据异步写入mysql
 
-2. 'sinahouse.middlewares.UserAgentMiddleware','sinahouse.middlewares.ProxyMiddleware' 分别实现用户代理UserAgent变换和IP代理变换
+2. 'common.middlewares.UserAgentMiddleware','common.middlewares.ProxyMiddleware' 分别实现用户代理UserAgent变换和IP代理变换
 
 3. 'sinahouse.pipelines.ThreadImagesPipeline','sinahouse.pipelines.CustomImagesPipeline'分别是基于多线程将图片下载保存到images文件夹和继承scrapy自带  ImagePipline的实现的图片下载保存到images_store
 
