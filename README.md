@@ -1,7 +1,7 @@
 
 #SinaHouseCrawler
 ### 简介
-基于scrapy, scrapy-redis实现的一个分布式网络爬虫,爬取了 **[新浪房产](http://data.house.sina.com.cn/sc/search/)** 的楼盘信息及户型图片
+基于scrapy, scrapy-redis实现的一个分布式网络爬虫,爬取了 **[新浪房产](http://data.house.sina.com.cn/sc/search/)** 的楼盘信息及户型图片,实现了数据提取,去重,保存,数据的增量爬取,代理的使用,失效代理的清除,useragent的切换,图片的下载等功能,并且common模块中的middlewares等功能可以在其他爬虫需求中重复使用.
 
 ---
 ### 数据展示
