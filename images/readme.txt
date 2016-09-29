@@ -1,1 +1,0 @@
-此文件夹保存  ThreadImagesPipeline 下载的图片

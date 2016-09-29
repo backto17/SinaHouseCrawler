@@ -1,1 +1,0 @@
-此文件夹保存  CustomImagesPipeline 下载的图片
