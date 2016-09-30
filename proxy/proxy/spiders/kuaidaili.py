@@ -8,15 +8,7 @@ class KuaidailiSpider(scrapy.Spider):
     start_urls = (
         'http://www.kuaidaili.com/',
     )
-    custom_settings = {
-                   'DOWNLOADER_MIDDLEWARES': {
-                                              'common.middlewares.useragent.UserAgentMiddleware': 730,
-                                              'common.middlewares.proxy.ProxyMiddleware': 735,
-                                              },
-                   'ITEM_PIPELINES': {},
-                   'DOWNLOAD_TIMEOUT': 30,
-                   'RETRY_ENABLED' : True,
-                   }
+
     def start_requests(self):
         for i in xrange(1, 10):
             yield Request('http://www.kuaidaili.com/free/inha/%s/' % i, callback=self.parse)

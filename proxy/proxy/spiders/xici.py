@@ -10,19 +10,10 @@ from scrapy.http.request import Request
 
 
 class XiciSpider(Spider):
-    """ meta={'proxy': 'http://127.0.0.1:1080'}, """
     name = 'xici'
     allowed_domains = ['www.xicidaili.com']
     start_urls = ['http://www.xicidaili.com/nn/']
-    custom_settings = {
-                       'DOWNLOADER_MIDDLEWARES': {
-                                                  'common.middlewares.useragent.UserAgentMiddleware': 730,
-                                                  'common.middlewares.proxy.ProxyMiddleware': 735,
-                                                  },
-                       'ITEM_PIPELINES': {},
-                       'DOWNLOAD_TIMEOUT': 30,
-                       'RETRY_ENABLED' : True,
-                       }
+
     def start_requests(self):
         for i in xrange(1, 10):
             yield Request('http://www.xicidaili.com/nn/%s' % i, callback=self.parse)
