@@ -1,8 +1,8 @@
 
 #SinaHouseCrawler
 ### 简介
-基于scrapy, scrapy-redis实现的一个分布式网络爬虫,爬取了 **[新浪房产](http://data.house.sina.com.cn/sc/search/)** 的楼盘信息及户型图片,实现了数据提取,去重,保存,分页数据的采集,数据的增量爬取,代理的使用,失效代理的清除,useragent的切换,图片的下载等功能,并且common模块中的middlewares等功能可以在其他爬虫需求中重复使用.
-
+1. SinaHouseCrawler/house 基于scrapy, scrapy-redis实现的一个分布式网络爬虫,爬取了 **[新浪房产](http://data.house.sina.com.cn/sc/search/)** 的楼盘信息及户型图片,实现了数据提取,去重,保存,分页数据的采集,数据的增量爬取,代理的使用,失效代理的清除,useragent的切换,图片的下载等功能,并且common模块中的middlewares等功能可以在其他爬虫需求中重复使用.
+2. SinaHouseCrawler/proxy 爬取了[西刺](http://www.xicidaili.com/nn/) 和[快代理](http://www.kuaidaili.com/)两个网站上的高匿名代理,通过代理访问[网易](http://www.163.com/)作为检验,保留访问成功的代理数据.
 ---
 ### 数据展示
 
@@ -17,7 +17,9 @@
 ---
 **ThreadImagesPipeline下载的图片**
 ![图片](https://raw.githubusercontent.com/Fighting-Toghter/Exercise/master/images/images.png)
-
+---
+** xici和kuaidaili的代理ip数据**
+![图片](https://raw.githubusercontent.com/Fighting-Toghter/Exercise/master/images/proxyip.png)
 ---
 ### 功能清单:
 
@@ -79,13 +81,23 @@ scrapy parse --spider=sinahouse  -c parse_house -d 5 "http://data.house.sina.com
 
 查看item是否提取成功，item中**字段意义**，请查看**SinaHouseItem**中的注释。    
 ---
-### 运行方法:    
+### 运行方法:  
+---
+1. sinahouse运行
 ####单机:
 ```
-  cd SinaHouseCrawler    
+  cd SinaHouseCrawler/house/    
   scrapy crawl sinahouse   
 ```
 ####分布式:    
  配置好setting中的scrapy-redis的相关参数,在各机器中分别按单机方式启动即可    
   
 **爬取目标网站**: [新浪房产](http://data.house.sina.com.cn/sc/search/)
+---
+2. xici和kuaidaili运行
+```
+  cd SinaHouseCrawler/proxy/
+  scrapy crawl xici -o xici.json
+  scrapy crawl kuaidaili -o kuaidaili.json
+ ```
+ **爬取目标网站**: [西刺](http://www.xicidaili.com/nn/) 和[快代理](http://www.kuaidaili.com/)
