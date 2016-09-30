@@ -30,15 +30,14 @@ class ProxyMiddleware(object):
     
     def process_request(self, request, spider):
         scheme = self.get_scheme(request.url)
-        if 'proxy' in request.meta and not 'proxy_filed_time' in request.meta:
-            request.meta['proxy_filed_time'] = 1
-        elif 'proxy_filed_time' in request.meta:
-            if request.meta['proxy_filed_time'] >= 2:
-                logger.warning('Bad %s proxy: %s', scheme, request.meta['proxy'])
-                self.remove_bad_proxy(scheme, request.meta['proxy'])
-            else:
-                request.meta['proxy_filed_time'] += 1
+        keep_proxy = request.meta.get('keep_proxy', False)
+        retries = request.meta.get('retry_times', 0)
+        if 'proxy' in request.meta:
+            if keep_proxy:
                 return
+            elif retries == 2:
+                    logger.warning('Bad %s proxy: %s', scheme, request.meta['proxy'])
+                    self.remove_bad_proxy(scheme, request.meta['proxy'])
         proxy = self.get_proxy(scheme)
         if proxy:
             request.meta['proxy'] = proxy
