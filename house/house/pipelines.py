@@ -86,7 +86,11 @@ class ThreadImagesPipeline(object):
     """
     def __init__(self,image_path):
         self.image_path = image_path
-    
+        try:
+            os.mkdir(self.image_path)
+        except:
+            pass
+
     @classmethod
     def from_crawler(cls,crawler):
         return cls(crawler.settings.get('IMAGE_PATH'))

@@ -10,7 +10,7 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
-from house.house.items import SinaHouseItem, SinaHouseLayout
+from house.items import SinaHouseItem, SinaHouseLayout
 
 
 class SinaHouseSpider(CrawlSpider):
@@ -18,7 +18,7 @@ class SinaHouseSpider(CrawlSpider):
     class:新浪房产爬虫: http://sh.house.sina.com.cn/
     """
     
-    name = 'house'
+    name = 'sinahouse'
     allowed_domains = ['house.sina.com.cn',]
     start_urls = ['http://data.house.sina.com.cn/sc/search/?keyword=&charset=utf8',]
     rules = [

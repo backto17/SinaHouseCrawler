@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-import  sys
+import sys
+import datetime
 
 # 项目根目录
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -71,8 +72,8 @@ STATSMAILER_RCPTS = ['ALEX.LIN@xxx.com',]
 
 DOWNLOADER_MIDDLEWARES = {
     'common.middlewares.useragent.UserAgentMiddleware': 730,
-#     'common.middlewares.proxy.ProxyMiddleware': 735,
-#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 740,
+    # 'common.middlewares.proxy.ProxyMiddleware': 735,
+    # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 740,
 }
 
 EXTENSIONS = {
@@ -141,6 +142,6 @@ PROXIES = [
 
 ################################################################################################################################
 try:
-    from house.settings_local import *
+    from settings_local import *
 except:
     pass
