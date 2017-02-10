@@ -9,7 +9,6 @@ import re
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from scrapy.exceptions import DropItem
 from house.items import SinaHouseItem, SinaHouseLayout
 
 
@@ -84,7 +83,7 @@ class SinaHouseSpider(CrawlSpider):
             u'未知').strip()
         house['decoration'] = response.xpath(
             u"//ul[@class='z_info_list clearfix']//li[contains(label, '装修情况')]/text()").extract_first(u'未知').strip()
-        house['description'] = response.xpath("//div[@class='z_project_info']/text()").extract_first(u'暂无').strip()
+        house['description'] = response.xpath("//div[@class='z_project_info']").extract_first(u'暂无').strip()
         # 楼盘户型图首页
         huxing_url = response.xpath(u"//ul[@class='z_main_menu']//a[contains(text(),'户型图')]/@href").extract_first()
         if huxing_url:
