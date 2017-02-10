@@ -80,12 +80,11 @@ scrapy crawl leju -s CLOSESPIDER_ITEMCOUNT=3 -o newhouse.json
 查看newhouse.json中的数据是否与house.json中的数据类似.
 方法二:
 ```
-scrapy parse --spider=sinahouse  -c parse_house -d 5 "http://data.house.sina.com.cn/jx108948?wt_source=search_nr_bt02"
+scrapy parse --spider=leju  -c parse_house -d 9 "http://house.leju.com/sc129079/#wt_source=pc_search_lpxx_bt"
 ```
-查看item是否提取成功
+查看item是否提取成功,windows cmd下显示可能为乱码.
 
-数据中各个字段的**意义**，请查看 **house.items**以及**common.items.house** 中的注释。  
-
+数据中各个字段的**意义**，请查看 **house.items**以及**common.items.house** 中的注释。 
 ---
 ### 运行方法:  
 ---
