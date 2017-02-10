@@ -92,7 +92,7 @@ scrapy parse --spider=leju  -c parse_house -d 9 "http://house.leju.com/sc129079/
 ####单机:
 ```
   cd SinaHouseCrawler/house/    
-  scrapy crawl sinahouse   
+  scrapy crawl leju 
 ```
 ####分布式:    
  配置好setting中的scrapy-redis的相关参数,在各机器中分别按单机方式启动即可    
