@@ -1,5 +1,5 @@
 ### 简介
-1. SinaHouseCrawler/house 基于scrapy, scrapy-redis实现的一个分布式网络爬虫,爬取了 ~~[新浪房产](http://data.house.sina.com.cn/sc/search/)~~ [^footnote]**[乐居房产](http://sc.leju.com/)** 的楼盘信息及户型图片,实现了数据提取,去重,保存,分页数据的采集,数据的增量爬取,代理的使用,失效代理的清除,useragent的切换,图片的下载等功能,并且common模块中的中间件等可以在其他爬虫中复用.
+1. SinaHouseCrawler/house 基于scrapy, scrapy-redis实现的一个分布式网络爬虫,爬取了 ~~[新浪房产](http://data.house.sina.com.cn/sc/search/)~~ <sup id="a1">[1](#f1)</sup>**[乐居房产](http://sc.leju.com/)** 的楼盘信息及户型图片,实现了数据提取,去重,保存,分页数据的采集,数据的增量爬取,代理的使用,失效代理的清除,useragent的切换,图片的下载等功能,并且common模块中的中间件等可以在其他爬虫中复用.
 2. SinaHouseCrawler/proxy 爬取了[西刺](http://www.xicidaili.com/nn/) 和[快代理](http://www.kuaidaili.com/)两个网站上的高匿名代理,通过代理访问[网易](http://www.163.com/)作为检验,保留访问成功的代理数据.
 
 ---
@@ -108,5 +108,7 @@ scrapy parse --spider=sinahouse  -c parse_house -d 5 "http://data.house.sina.com
   scrapy crawl kuaidaili -o kuaidaili.json
  ```
  **爬取目标网站**: [西刺](http://www.xicidaili.com/nn/) 和[快代理](http://www.kuaidaili.com/)
+ 
+---
 
-[^footnote]: 网站大改版,原是[新浪房产](http://data.house.sina.com.cn/sc/search/),现改为[乐居房产](http://sc.leju.com/),链接由http://data.house.sina.com.cn改为http://sc.leju.com,原始链接仍然会跳转到新链接
+<b id="f1">1</b> 网站大改版,原是[新浪房产](http://data.house.sina.com.cn/sc/search/),现改为[乐居房产](http://sc.leju.com/),链接由http://data.house.sina.com.cn 改为 http://sc.leju.com ,原始链接会跳转到新链接 [↩](#a1)
