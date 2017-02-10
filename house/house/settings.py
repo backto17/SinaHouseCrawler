@@ -6,13 +6,13 @@ import datetime
 
 # 项目根目录
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, PROJECT_ROOT)
+sys.path.insert(1, PROJECT_ROOT)
 
 BOT_NAME = 'house'
 SPIDER_MODULES = ['house.spiders']
 NEWSPIDER_MODULE = 'house.spiders'
 DOWNLOAD_HANDLERS = {'s3': None,}
-
+FEED_EXPORT_ENCODING = 'utf-8'
 # AUTOTHROTTLE_ENABLED = True
 
 COOKIES_ENABLED=False
