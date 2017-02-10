@@ -14,6 +14,7 @@ class SinaHouseLayout(HouseLayoutItemBase):
 
 class SinaHouseItem(HouseItemBase):
     source_id = scrapy.Field() # 楼盘在新浪房产的id
+    description = scrapy.Field() # 楼盘简介
     
 
     
