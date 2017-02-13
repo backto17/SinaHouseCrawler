@@ -1,8 +1,8 @@
 # coding: utf-8
-'''
+"""
 @date: Feb 24, 2016
 @author: alex.lin
-'''
+"""
 import datetime
 import re
 
@@ -11,7 +11,6 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from house.items import SinaHouseItem, SinaHouseLayout
 
-
 class SinaHouseSpider(CrawlSpider):
     """
     class:乐居房产爬虫: http://sh.leju.com/
@@ -19,7 +18,7 @@ class SinaHouseSpider(CrawlSpider):
 
     name = 'leju'
     allowed_domains = ['leju.com', ]
-    start_urls = ['http://SC.leju.com/', ]
+    start_urls = ['http://sc.leju.com/', ]
     rules = [
         #  具体楼盘链接提取
         Rule(LinkExtractor(allow=(r'.*//house\.leju\.com/\w+\d+/(#wt_source=.*)?$')),
@@ -33,11 +32,11 @@ class SinaHouseSpider(CrawlSpider):
     ]
 
     def parse_house(self, response):
+        """提取楼盘封面等基本信息
+        :param response: http response
+        :return: request if house has detail_url else None
         """
-        func:提取楼盘信息
-        :param response:
-        :return: request
-        """
+
         house = SinaHouseItem()
         house['create_time'] = datetime.datetime.now()
         house['source_id'] = int(
@@ -55,9 +54,8 @@ class SinaHouseSpider(CrawlSpider):
             self.logger.info(u'此楼盘详情信息: %s', house['url'])
 
     def parse_house_detail(self, response):
-        """
-        func:获取楼盘详情
-        :param response:
+        """获取楼盘详情
+        :param response: http response
         :return: item/request
         """
         house = response.meta['house']
@@ -111,7 +109,9 @@ class SinaHouseSpider(CrawlSpider):
             houselayout['area'] = huxing_record.xpath(".//h3[1]/text()").extract_first()
             houselayout['price'] = huxing_record.xpath(
                 "concat(.//h3[2]/text()[1],.//h3[2]/text()[2])").extract_first().strip()
+            # 户型收集起来
             house['layout_items'].append(dict(houselayout))
+
         # 部分户型图有分页, 如: http://data.house.sina.com.cn/sc127009/huxing/#wt_source=data6_tpdh_hxt
         # 网站改版后新链接: http://house.leju.com/sc127009/huxing/
         next_url = response.xpath(u"//a[@class='next']/@href").extract_first()
